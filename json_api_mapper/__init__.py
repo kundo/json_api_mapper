@@ -1,0 +1,1 @@
+from json_api_mapper import JsonApiMapper
