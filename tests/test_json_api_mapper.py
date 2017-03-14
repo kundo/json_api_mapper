@@ -1,6 +1,3 @@
-import sys
-sys.path.append("/home/frost/code/github/kundo/json_api_mapper/")
-
 from unittest import TestCase
 from json_api_mapper import JsonApiMapper
 

@@ -8,4 +8,9 @@ setup(name='json_api_mapper',
       author_email='dev@kundo.se',
       license='MIT',
       packages=['json_api_mapper'],
+      install_requires=[
+          'jsonpointer',
+          'python-dateutil',
+          'six',
+      ],
       zip_safe=False)

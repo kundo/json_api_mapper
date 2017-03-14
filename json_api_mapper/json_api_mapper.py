@@ -1,5 +1,6 @@
 import dateutil
 import jsonpointer
+from six import with_metaclass
 
 
 class JsonApiMapperMeta(type):
@@ -9,8 +10,7 @@ class JsonApiMapperMeta(type):
         super(JsonApiMapperMeta, cls).__init__(name, bases, clsdict)
 
 
-class JsonApiMapper(object):
-    __metaclass__ = JsonApiMapperMeta
+class JsonApiMapper(with_metaclass(JsonApiMapperMeta, object)):
     registry = {}
 
     def map_json(self, json):
