@@ -63,13 +63,13 @@ class JsonApiMapper(with_metaclass(JsonApiMapperMeta, object)):
     def _link_relationships(cls, item, key_mapper):
         relationships = item.pop("relationships", {})
         for key, value in relationships.items():
-            def do(data):
-                relationsship_data = data.get('data', {})
+            def do(relationsship_data):
                 related_type = relationsship_data.get("type", None)
                 related_id = relationsship_data.get("id", None)
                 return key_mapper.get((related_type, related_id), relationsship_data)
-
-            item[key] = cls._apply_once_or_many(value, do)
+            item[key] = cls._apply_once_or_many(value["data"], do)
+            if "meta" in value:
+                item[key+"_meta"] = value["meta"]
 
     @classmethod
     def _apply_once_or_many(cls, data, func):
