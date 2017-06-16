@@ -20,6 +20,8 @@ class JsonApiMapper(with_metaclass(JsonApiMapperMeta, object)):
         result["type"] = json["type"]
         if "relationships" in json:
             result["relationships"] = json["relationships"]
+        if "meta" in json:
+            result["jsonapi_meta"] = json["meta"]
 
         for attr, spec in type(self).__dict__.items():
             if isinstance(spec, dict) and "type" in spec:
