@@ -120,6 +120,9 @@ class JsonApiMapperTest(TestCase):
                     "title": "a title",
                     "some_special_value": 4711,
                 },
+                "meta": {
+                    "ohai": "can haz cheezburger?"
+                },
                 "relationships": {
                     "parents": {
                         "data": [
@@ -169,6 +172,7 @@ class JsonApiMapperTest(TestCase):
             title="a title",
             public_url=None,
             special=4711,
+            jsonapi_meta=dict(ohai="can haz cheezburger?"),
             parents=[
                 dict(id="id-parent-1", name="Dad McDadFace"),
                 dict(id="id-parent-2", name="Mom McMomFace"),
