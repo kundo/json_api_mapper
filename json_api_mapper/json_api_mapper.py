@@ -69,9 +69,10 @@ class JsonApiMapper(with_metaclass(JsonApiMapperMeta, object)):
                 related_type = relationsship_data.get("type", None)
                 related_id = relationsship_data.get("id", None)
                 return key_mapper.get((related_type, related_id), relationsship_data)
-            item[key] = cls._apply_once_or_many(value["data"], do)
-            if "meta" in value:
-                item[key+"_meta"] = value["meta"]
+            if value:
+                item[key] = cls._apply_once_or_many(value["data"], do)
+                if "meta" in value:
+                    item[key+"_meta"] = value["meta"]
 
     @classmethod
     def _apply_once_or_many(cls, data, func):
