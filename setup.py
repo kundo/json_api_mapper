@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='json_api_mapper',
-      version='0.0.1',
+      version='0.0.2',
       description='JSON API mapper',
       url='https://github.com/kundo/json_api_mapper',
       author='Kundo',

@@ -110,6 +110,34 @@ class JsonApiMapperTest(TestCase):
         )
         self.assertEqual(actual, expected)
 
+    def test_with_relationships__with_empty_relations(self):
+        api_json = {
+            "data": {
+                "id": "asd",
+                "type": "test",
+                "attributes": {
+                    "content": "hej hej",
+                    "title": "a title",
+                    "some_special_value": 4711,
+                },
+                "relationships": {"parent": {}}
+            },
+            "included": []
+        }
+
+        actual = JsonApiMapper.from_json(api_json)
+
+        expected = dict(
+            id="asd",
+            content="hej hej",
+            title="a title",
+            public_url=None,
+            special=4711,
+        )
+
+        assert actual == expected
+
+
     def test_with_multiple_related_objects_and_meta(self):
         api_json = {
             "data": {
