@@ -12,11 +12,7 @@ jobs:
     steps:
       - checkout
 
-      - run:
-          name: Setup
-          command: |
-            python setup.py develop
-            pip install pytest
+      - setup_dependencies
 
       - run:
           name: Run tests
@@ -50,11 +46,7 @@ jobs:
     steps:
       - checkout
 
-      - run:
-          name: Setup
-          command: |
-            python setup.py develop
-            pip install pytest
+      - setup_dependencies
 
       - run:
           name: Run tests
@@ -82,11 +74,7 @@ jobs:
     steps:
       - checkout
 
-      - run:
-          name: Setup
-          command: |
-            python setup.py develop
-            pip install pytest
+      - setup_dependencies
 
       - run:
           name: Run tests
@@ -138,3 +126,13 @@ workflows:
             - test_python_27
             - test_python_35
             - test_python_36
+
+commands:
+  # See https://circleci.com/docs/2.0/reusing-config/
+  setup_dependencies:
+    steps:
+      - run:
+          name: Setup
+          command: |
+            python setup.py develop
+            pip install pytest
