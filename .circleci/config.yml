@@ -1,113 +1,66 @@
-version: 2
+---
+version: 2.1
 
 jobs:
   test_python_27:
     docker:
       - image: circleci/python:2.7
         user: root
-        cmd: ["/bin/bash"]
+        command: ["/bin/bash"]
 
     working_directory: ~/json_api_mapper
 
     steps:
       - checkout
 
-      - run:
-          name: Setup
-          command: |
-            python setup.py develop
-            pip install pytest
+      - setup_dependencies
 
-      - run:
-          name: Run tests
-          command: |
-            pytest --junitxml=junit-py27.xml
-            mkdir -p reports
-            cp junit*.xml reports/
+      - run_tests_with_coverage:
+          reports_file: junit-py27.xml
 
-      - run:
-          name: Move reports to reports dir
-          command: |
-            mkdir -p reports
-            cp junit*.xml reports/
-
-      - store_test_results:
-          name: Store test artifacts
-          path: reports
-
-      - store_artifacts:
-          name: Store test artifacts
-          path: reports
+      - store_results_and_artifacts
 
   test_python_35:
     docker:
       - image: circleci/python:3.5
         user: root
-        cmd: ["/bin/bash"]
+        command: ["/bin/bash"]
 
     working_directory: ~/json_api_mapper
 
     steps:
       - checkout
 
-      - run:
-          name: Setup
-          command: |
-            python setup.py develop
-            pip install pytest
+      - setup_dependencies
 
-      - run:
-          name: Run tests
-          command: |
-            pytest --junitxml=junit-py35.xml
-            mkdir -p reports
-            cp junit*.xml reports/
+      - run_tests_with_coverage:
+          reports_file: junit-py35.xml
 
-      - store_test_results:
-          name: Collect test reports
-          path: reports
-
-      - store_artifacts:
-          name: Store test artifacts
-          path: reports
+      - store_results_and_artifacts
 
   test_python_36:
     docker:
       - image: circleci/python:3.6
         user: root
-        cmd: ["/bin/bash"]
+        command: ["/bin/bash"]
 
     working_directory: ~/json_api_mapper
 
     steps:
       - checkout
 
-      - run:
-          name: Setup
-          command: |
-            python setup.py develop
-            pip install pytest
+      - setup_dependencies
 
-      - run:
-          name: Run tests
-          command: |
-            pytest --junitxml=junit-py36.xml
-            mkdir -p reports
-            cp junit*.xml reports/
+      - run_tests_with_coverage:
+          reports_file: junit-py36.xml
 
-      - store_test_results:
-          name: Collect test reports
-          path: reports
-
-      - store_artifacts:
-          name: Store test artifacts
-          path: reports
+      - store_results_and_artifacts
 
   release:
     docker:
       - image: circleci/python:3.6
         user: root
-        cmd: ["/bin/bash"]
+        command: ["/bin/bash"]
 
     working_directory: ~/json_api_mapper
 
@@ -138,3 +91,37 @@ workflows:
             - test_python_27
             - test_python_35
             - test_python_36
+
+commands:
+  # See https://circleci.com/docs/2.0/reusing-config/
+  setup_dependencies:
+    steps:
+      - run:
+          name: Setup
+          command: |
+            python setup.py develop
+            pip install pytest
+
+  run_tests_with_coverage:
+    parameters:
+      reports_file:
+        description: What to call the generated coverage file
+        type: string
+        default: junit-pyXX.xml
+    steps:
+      - run:
+          name: Run tests
+          command: |
+            pytest --junitxml=<<parameters.reports_file>>
+            mkdir -p reports
+            cp junit*.xml reports/
+
+  store_results_and_artifacts:
+    steps:
+      - store_test_results:
+          name: Collect test results
+          path: reports
+
+      - store_artifacts:
+          name: Store test results as an artefact
+          path: reports
