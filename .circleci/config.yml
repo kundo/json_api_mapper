@@ -1,4 +1,5 @@
-version: 2
+---
+version: 2.1
 
 jobs:
   test_python_27:
@@ -14,12 +15,8 @@ jobs:
 
       - setup_dependencies
 
-      - run:
-          name: Run tests
-          command: |
-            pytest --junitxml=junit-py27.xml
-            mkdir -p reports
-            cp junit*.xml reports/
+      - run_tests_with_coverage:
+          reports_file: junit-py27.xml
 
       - store_results_and_artifacts
 
@@ -36,12 +33,8 @@ jobs:
 
       - setup_dependencies
 
-      - run:
-          name: Run tests
-          command: |
-            pytest --junitxml=junit-py35.xml
-            mkdir -p reports
-            cp junit*.xml reports/
+      - run_tests_with_coverage:
+          reports_file: junit-py35.xml
 
       - store_results_and_artifacts
 
@@ -58,12 +51,8 @@ jobs:
 
       - setup_dependencies
 
-      - run:
-          name: Run tests
-          command: |
-            pytest --junitxml=junit-py36.xml
-            mkdir -p reports
-            cp junit*.xml reports/
+      - run_tests_with_coverage:
+          reports_file: junit-py36.xml
 
       - store_results_and_artifacts
 
@@ -112,6 +101,21 @@ commands:
           command: |
             python setup.py develop
             pip install pytest
+
+  run_tests_with_coverage:
+    parameters:
+      reports_file:
+        description: What to call the generated coverage file
+        type: string
+        default: junit-pyXX.xml
+    steps:
+      - run:
+          name: Run tests
+          command: |
+            pytest --junitxml=<<parameters.reports_file>>
+            mkdir -p reports
+            cp junit*.xml reports/
+
   store_results_and_artifacts:
     steps:
       - store_test_results:
