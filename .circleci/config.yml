@@ -21,13 +21,7 @@ jobs:
             mkdir -p reports
             cp junit*.xml reports/
 
-      - store_test_results:
-          name: Store test artifacts
-          path: reports
-
-      - store_artifacts:
-          name: Store test artifacts
-          path: reports
+      - store_results_and_artifacts
 
   test_python_35:
     docker:
@@ -49,13 +43,7 @@ jobs:
             mkdir -p reports
             cp junit*.xml reports/
 
-      - store_test_results:
-          name: Collect test reports
-          path: reports
-
-      - store_artifacts:
-          name: Store test artifacts
-          path: reports
+      - store_results_and_artifacts
 
   test_python_36:
     docker:
@@ -77,13 +65,7 @@ jobs:
             mkdir -p reports
             cp junit*.xml reports/
 
-      - store_test_results:
-          name: Collect test reports
-          path: reports
-
-      - store_artifacts:
-          name: Store test artifacts
-          path: reports
+      - store_results_and_artifacts
 
   release:
     docker:
@@ -130,3 +112,12 @@ commands:
           command: |
             python setup.py develop
             pip install pytest
+  store_results_and_artifacts:
+    steps:
+      - store_test_results:
+          name: Collect test results
+          path: reports
+
+      - store_artifacts:
+          name: Store test results as an artefact
+          path: reports
