@@ -21,12 +21,6 @@ jobs:
             mkdir -p reports
             cp junit*.xml reports/
 
-      - run:
-          name: Move reports to reports dir
-          command: |
-            mkdir -p reports
-            cp junit*.xml reports/
-
       - store_test_results:
           name: Store test artifacts
           path: reports
